@@ -1,0 +1,16 @@
+version: '1.0'
+steps:
+
+  Compilation:
+    title: Compile/Unit test
+    image: maven:3.5.2-jdk-8-alpine
+    commands:
+     - mvn -Dmaven.repo.local=/codefresh/volume/m2_repository package
+
+  BuildingDockerImage:
+    title: Building Docker Image
+    type: build
+    image_name: kanigicharla8/springbootexample
+    working_directory: ./
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
