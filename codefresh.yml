@@ -7,6 +7,10 @@ steps:
     commands:
      - mvn -Dmaven.repo.local=/codefresh/volume/m2_repository package
 
+  askForPermission:
+    type: pending-approval
+    title: Permission to Create Docker Image
+
   BuildingDockerImage:
     title: Building Docker Image
     type: build
@@ -14,3 +18,8 @@ steps:
     working_directory: ./
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
+    when:
+      steps:
+      -name: askForPermission
+        on:
+        - approved
