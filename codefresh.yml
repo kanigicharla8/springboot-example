@@ -21,3 +21,15 @@ steps:
     candidate: '${{BuildingDockerImage}}'
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     registry: gcr-kanigicharla-k8s
+
+  DeployToK8s:
+    title: Deploy to K8S
+    type: deploy
+    kind: kubernetes
+    cluster:  standard-cluster-1@TestProject
+    namespace: default
+    service: springboot-example
+    timeout: '150'
+    candidate:
+      image: ${{BuildingDockerImage}}
+      registry: gcr-kanigicharla-k8s
