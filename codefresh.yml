@@ -5,7 +5,7 @@ steps:
     title: Compile/Unit test
     image: maven:3.5.2-jdk-8-alpine
     commands:
-     - mvn -Dmaven.repo.local=/codefresh/volume/m2_repository package
+    - mvn -Dmaven.repo.local=/codefresh/volume/m2_repository package
 
   BuildingDockerImage:
     title: Building Docker Image
@@ -15,11 +15,9 @@ steps:
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
 
-  github-pr:
-    image: codefresh/github-pr-plugin
-    environment:
-    - GITHUB_REPO_OWNER=${{CF_REPO_OWNER}}
-    - GITHUB_REPO_NAME=${{CF_REPO_NAME}}
-    - BASE=master
-    - HEAD=${{CF_BRANCH}}
-    - TITLE=Codefresh PR for ${{CF_BRANCH}}
+  PushToRegistry:
+    title: Push image to GCR
+    type: push
+    candidate: '${{BuildingDockerImage}}'
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    registry: gcr-kanigicharla-k8s
